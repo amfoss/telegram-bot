@@ -29,7 +29,7 @@ def error(update, context):
 
 
 def main():
-    updater = Updater("890592460:AAGMa07G5bue9Cs9bZfSg72haxQhVwQ3bAA", use_context=True)
+    updater = Updater("<YOUR BOT TOKEN HERE>", use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
 
