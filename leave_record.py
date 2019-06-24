@@ -35,11 +35,11 @@ def getType(t):
     return "T"
 
 def mutate_cms(d):
-    client = GraphQLClient('https://api.amfoss.in')
+    client = GraphQLClient('https://api.amfoss.in/')
     query ="""
-        mutation RecordLeaveToday($user_id: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
+        mutation RecordLeaveToday($userId: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
         {
-          RecordLeaveToday(user_id: $user_id, reason: $reason, type: $type, botToken: $botToken, token: $token)
+          RecordLeaveToday(userId: $userId, reason: $reason, type: $type, botToken: $botToken, token: $token)
           {
             id
           }
@@ -47,7 +47,7 @@ def mutate_cms(d):
     """
     token = config('BOT_TOKEN')
     variables = {
-        "user_id": d['user'],
+        "userId": d['user'],
         "reason": d['reason'],
         "type": getType(d['type']),
         "botToken": token,
