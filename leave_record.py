@@ -8,7 +8,8 @@ from decouple import config
 TYPE, REASON = range(2)
 
 def get_cms_token():
-    client = GraphQLClient('https://api.amfoss.in/')
+    api_url = config('API_URL')
+    client = GraphQLClient(api_url)
     query = """
     mutation TokenAuth($username: String!, $password: String!) {
       tokenAuth(username: $username, password: $password) {
@@ -35,7 +36,8 @@ def getType(t):
     return "T"
 
 def mutate_cms(d):
-    client = GraphQLClient('https://api.amfoss.in/')
+    api_url = config('API_URL')
+    client = GraphQLClient(api_url)
     query ="""
         mutation RecordLeaveToday($userId: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
         {
