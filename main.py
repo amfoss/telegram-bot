@@ -1,7 +1,9 @@
+#!/usr/bin/python3.6
 import logging
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
+from decouple import config
+
 
 from leave_record import LeaveRecord
 
@@ -29,7 +31,8 @@ def error(update, context):
 
 
 def main():
-    updater = Updater("<YOUR BOT TOKEN HERE>", use_context=True)
+    token = config('BOT_TOKEN')
+    updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
 
