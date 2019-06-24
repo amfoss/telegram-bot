@@ -37,9 +37,9 @@ def getType(t):
 def mutate_cms(d):
     client = GraphQLClient('https://api.amfoss.in')
     query ="""
-        mutation RecordLeaveToday($username: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
+        mutation RecordLeaveToday($user_id: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
         {
-          RecordLeaveToday(username: $username, reason: $reason, type: $type, botToken: $botToken, token: $token)
+          RecordLeaveToday(user_id: $user_id, reason: $reason, type: $type, botToken: $botToken, token: $token)
           {
             id
           }
@@ -47,7 +47,7 @@ def mutate_cms(d):
     """
     token = config('BOT_TOKEN')
     variables = {
-        "username": d['user'],
+        "user_id": d['user'],
         "reason": d['reason'],
         "type": getType(d['type']),
         "botToken": token,
@@ -77,7 +77,7 @@ class LeaveRecord:
 
     def registerLeave(bot, context):
         d = context.user_data
-        d['user'] = bot.message.from_user['username']
+        d['user'] = bot.message.from_user['id']
         d['reason'] = bot.message.text
         bot.message.reply_text("Thank you for informing me.")
         bot.message.reply_text("Hope to see you soon again in the lab...")
