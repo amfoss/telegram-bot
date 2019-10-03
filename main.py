@@ -41,7 +41,7 @@ def main():
         entry_points=[CommandHandler('leaverecord', l.getType)],
 
         states={
-            TYPE: [RegexHandler('^(Health|Family/Home|Tired|Academics|Duty)$', l.getReason)],
+            TYPE: [MessageHandler(Filters.regex('^(Health|Family/Home|Tired|Academics|Duty)$'), l.getReason)],
             REASON: [MessageHandler(Filters.text, l.registerLeave)]
         },
 
@@ -50,7 +50,12 @@ def main():
 
     dp.add_handler(leave_handler)
     dp.add_error_handler(error)
-    updater.start_polling()
+    updater.start_webhook(listen='0.0.0.0',
+                      port=8443,
+                      url_path=token,
+                      key='private.key',
+                      cert='cert.pem',
+                      webhook_url='https://ec2-18-232-129-114.compute-1.amazonaws.com:8443/'+token)
     updater.idle()
 
 
