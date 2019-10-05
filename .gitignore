@@ -1,7 +1,8 @@
+/__pycache__
 /bin
 /include
 /lib
 cert.pem
-private.key
+webhook_pkey.key
+webhook_cert.pem
 settings.ini
-/__pycache__
