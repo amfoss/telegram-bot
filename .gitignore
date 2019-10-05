@@ -2,7 +2,6 @@
 /bin
 /include
 /lib
-cert.pem
 webhook_pkey.key
 webhook_cert.pem
 settings.ini
