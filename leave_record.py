@@ -63,8 +63,8 @@ class LeaveRecord:
     def getType(bot, context):
         reply_keyboard = [['Health', 'Family/Home', 'Tired', "Academics"]]
 
-        bot.message.reply_text("Sad to know that, you wont be coming to lab today...")
-        bot.message.reply_text("What's the general cause?",
+        bot.message.reply_text("Sad to know that, you wont be coming to lab today...\n"
+                                "What's the general cause?",
                                reply_markup=ReplyKeyboardMarkup(reply_keyboard,
                                one_time_keyboard=True))
         return TYPE
@@ -90,3 +90,5 @@ class LeaveRecord:
     def cancel(bot, context):
         bot.message.reply_text('Bye! I hope we can talk again some day.',
                                reply_markup=ReplyKeyboardRemove())
+        
+        return ConversationHandler.END

@@ -1,5 +1,6 @@
 #!/usr/bin/python3.6
 import logging
+import os
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
 from decouple import config
@@ -31,8 +32,8 @@ def error(update, context):
 
 
 def main():
-    token = config('BOT_TOKEN')
-    updater = Updater(token, use_context=True)
+    TOKEN = config('BOT_TOKEN')
+    updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
 
@@ -41,7 +42,7 @@ def main():
         entry_points=[CommandHandler('leaverecord', l.getType)],
 
         states={
-            TYPE: [RegexHandler('^(Health|Family/Home|Tired|Academics|Duty)$', l.getReason)],
+            TYPE: [MessageHandler(Filters.regex('^(Health|Family/Home|Tired|Academics|Duty)$'), l.getReason)],
             REASON: [MessageHandler(Filters.text, l.registerLeave)]
         },
 
@@ -50,7 +51,17 @@ def main():
 
     dp.add_handler(leave_handler)
     dp.add_error_handler(error)
-    updater.start_polling()
+    HOST = config('HOST')
+    PORT = config('PORT')
+    KEY = config('KEY')
+    CERT = config('CERT')
+    updater.start_webhook(listen='0.0.0.0',
+                      port=PORT,
+                      url_path=TOKEN,
+                      key=KEY,
+                      cert=CERT,
+                      webhook_url=HOST+':'+PORT+'/'+TOKEN)
+    # updater.start_polling()
     updater.idle()
 
 

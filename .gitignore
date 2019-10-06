@@ -1,0 +1,7 @@
+/__pycache__
+/bin
+/include
+/lib
+webhook_pkey.key
+webhook_cert.pem
+settings.ini
