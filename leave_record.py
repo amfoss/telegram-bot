@@ -3,12 +3,12 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ConversationHandler
 from graphqlclient import GraphQLClient
 import json
-from decouple import config
+import os
 
 TYPE, REASON = range(2)
 
 def get_cms_token():
-    api_url = config('API_URL')
+    api_url = 'https://api.amfoss.in/'
     client = GraphQLClient(api_url)
     query = """
     mutation TokenAuth($username: String!, $password: String!) {
@@ -17,8 +17,8 @@ def get_cms_token():
       }
     }
     """
-    admin_user = config('ADMIN_USER')
-    admin_pass = config('ADMIN_PASS')
+    admin_user = os.environ.get('ADMIN_USERNAME')
+    admin_pass = os.environ.get('ADMIN_PASSWORD')
     variables = {
         "username":admin_user,
         "password": admin_pass
@@ -36,7 +36,7 @@ def getType(t):
     return "T"
 
 def mutate_cms(d):
-    api_url = config('API_URL')
+    api_url = 'https://api.amfoss.in/'
     client = GraphQLClient(api_url)
     query ="""
         mutation RecordLeaveToday($userId: String!, $reason: String!, $type: String!, $botToken: String!, $token: String!)
@@ -47,7 +47,7 @@ def mutate_cms(d):
           }
         }
     """
-    token = config('BOT_TOKEN')
+    token = os.environ.get('TOKEN')
     variables = {
         "userId": d['user'],
         "reason": d['reason'],
@@ -55,7 +55,6 @@ def mutate_cms(d):
         "botToken": token,
         "token": get_cms_token()
     }
-    print(variables)
     client.execute(query, variables)
 
 class LeaveRecord:
@@ -90,5 +89,5 @@ class LeaveRecord:
     def cancel(bot, context):
         bot.message.reply_text('Bye! I hope we can talk again some day.',
                                reply_markup=ReplyKeyboardRemove())
-        
+
         return ConversationHandler.END

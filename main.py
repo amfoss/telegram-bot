@@ -5,7 +5,6 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
                           ConversationHandler)
 from decouple import config
 
-
 from leave_record import LeaveRecord
 
 # Enable logging
@@ -24,7 +23,7 @@ def start(bot, context):
 
 def help(bot, context):
     bot.message.reply_text(
-        "This bot will help you with all the functionalities.\n\n" 
+        "This bot will help you with all the functionalities.\n\n"
         "/leaverecord - register your leave record"
     )
 
@@ -33,7 +32,9 @@ def error(update, context):
 
 
 def main():
-    TOKEN = config('BOT_TOKEN')
+    TOKEN = os.environ.get('TOKEN')
+    NAME = os.environ.get('NAME')
+    PORT = os.environ.get('PORT')
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
@@ -53,16 +54,10 @@ def main():
 
     dp.add_handler(leave_handler)
     dp.add_error_handler(error)
-    HOST = config('HOST')
-    PORT = config('PORT')
-    KEY = config('KEY')
-    CERT = config('CERT')
-    updater.start_webhook(listen='0.0.0.0',
-                      port=PORT,
-                      url_path=TOKEN,
-                      key=KEY,
-                      cert=CERT,
-                      webhook_url=HOST+':'+PORT+'/'+TOKEN)
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TOKEN)
+    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
     # updater.start_polling()
     updater.idle()
 
